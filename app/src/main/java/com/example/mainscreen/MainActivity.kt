@@ -169,4 +169,140 @@ class MainActivity : ComponentActivity() {
         WelcomeScreen()
     }
 }
+    // Login
+    @Composable
+    fun LoginScreen() {
+        // Fondo morado
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF4B44A6)),
+            contentAlignment = Alignment.Center
+        ) {
+            // Tarjeta blanca principal
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .background(Color.White, shape = RoundedCornerShape(32.dp))
+                    .padding(vertical = 48.dp, horizontal = 32.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
+                // Imagen superior
+                Image(
+                    painter = painterResource(id = R.drawable.top_image),
+                    contentDescription = "Login Illustration",
+                    modifier = Modifier
+                        .size(180.dp)
+                        .padding(bottom = 24.dp)
+                )
+
+                // Texto del titulo
+                Text(
+                    text = "Login",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color(0xFF2B2B2B),
+                    modifier = Modifier.padding(bottom = 32.dp)
+                )
+
+                //label del name
+                Text(
+                    text = "Name",
+                    fontSize = 14.sp,
+                    color = Color(0xFF2B2B2B),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                )
+
+                // Campo Name
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp))
+                        .background(Color.White, shape = RoundedCornerShape(12.dp))
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                ) {
+                    Text(text = "", color = Color.Gray, fontSize = 14.sp)
+                }
+
+                // Label Email
+                Text(
+                    text = "Email",
+                    fontSize = 14.sp,
+                    color = Color(0xFF2B2B2B),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 8.dp)
+                )
+
+                // Cmpo Email
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp))
+                        .background(Color.White, shape = RoundedCornerShape(12.dp))
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                ) {
+                    Text(text = "", color = Color.Gray, fontSize = 14.sp)
+                }
+
+                // Labl Password
+                Text(
+                    text = "Password",
+                    fontSize = 14.sp,
+                    color = Color(0xFF2B2B2B),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 8.dp)
+                )
+
+                // Campo Password
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(1.dp, Color(0xFFE0E0E0), shape = RoundedCornerShape(12.dp))
+                        .background(Color.White, shape = RoundedCornerShape(12.dp))
+                        .padding(vertical = 16.dp, horizontal = 16.dp)
+                ) {
+                    Text(text = "", color = Color.Gray, fontSize = 14.sp)
+                }
+
+                // Texto Forgot password
+                Text(
+                    text = "Forgot password?",
+                    fontSize = 12.sp,
+                    color = Color.Gray,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp, bottom = 24.dp),
+                    textAlign = TextAlign.Start
+                )
+
+                // Botón Sign Up
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(0.55f)
+                        .background(Color(0xFF5C54B4), shape = RoundedCornerShape(50))
+                        .padding(vertical = 16.dp)
+                        .align(Alignment.End),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Sign Up",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            }
+        }
+    }
+
+    // Preview de Login Screen
+    @Preview(showBackground = true)
+    @Composable
+    fun LoginScreenPreview() {
+        LoginScreen()
+    }
