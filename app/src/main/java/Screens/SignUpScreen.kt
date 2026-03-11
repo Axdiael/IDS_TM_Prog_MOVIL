@@ -1,5 +1,6 @@
 package com.example.mainscreen.Screens
 
+import android.util.Patterns
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,18 +27,33 @@ import com.example.mainscreen.R
 @Composable
 fun SignUpScreen(navController: NavController) {
 
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    // Estados de los campos
+    var nombre by remember { mutableStateOf("") }
+    var mail by remember { mutableStateOf("") }
+    var telefono by remember { mutableStateOf("") }
+    var pass by remember { mutableStateOf("") }
+    var confirmPass by remember { mutableStateOf("") }
 
-    val textFieldColors = OutlinedTextFieldDefaults.colors(
-        focusedBorderColor = Color(0xFF5C54B4),
-        unfocusedBorderColor = Color(0xFFE0E0E0),
-        focusedLabelColor = Color(0xFF5C54B4),
-        cursorColor = Color(0xFF5C54B4)
-    )
+    // Estados de error por campo
+    var nombreError by remember { mutableStateOf(false) }
+    var mailError by remember { mutableStateOf(false) }
+    var telefonoError by remember { mutableStateOf(false) }
+    var passError by remember { mutableStateOf(false) }
+    var confirmPassError by remember { mutableStateOf(false) }
+
+    // Valida el formato del correo
+    fun isValidEmail(email: String): Boolean {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    // Valida todos los campos y activa errores si algo falla
+    fun validarFormulario() {
+        nombreError = nombre.isBlank() || !nombre.all { it.isLetter() || it.isWhitespace() }
+        mailError = !isValidEmail(mail)
+        telefonoError = telefono.isBlank() || !telefono.all { it.isDigit() } || telefono.length != 10
+        passError = pass.length < 6
+        confirmPassError = confirmPass != pass
+    }
 
     Box(
         modifier = Modifier
@@ -51,95 +67,113 @@ fun SignUpScreen(navController: NavController) {
                 .verticalScroll(rememberScrollState())
                 .background(Color.White, shape = RoundedCornerShape(32.dp))
                 .padding(vertical = 48.dp, horizontal = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(id = R.drawable.top_image),
-                contentDescription = "SignUp Illustration",
+                contentDescription = "Illustration",
                 modifier = Modifier
                     .size(150.dp)
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 8.dp)
             )
 
             Text(
-                text = "Registro",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = Color(0xFF2B2B2B),
-                modifier = Modifier.padding(bottom = 24.dp)
+                text = "Crear Cuenta",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF2B2B2B)
             )
 
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
+            // Campo nombre
+            TextField(
+                value = nombre,
+                onValueChange = { nombre = it },
                 label = { Text("Nombre") },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
-                colors = textFieldColors,
-                modifier = Modifier.fillMaxWidth()
+                isError = nombreError,
+                supportingText = { if (nombreError) Text("Campo requerido", color = Color.Red) },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+            // Campo correo
+            TextField(
+                value = mail,
+                onValueChange = { mail = it },
                 label = { Text("Correo") },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
+                isError = mailError,
+                supportingText = { if (mailError) Text("Correo no válido", color = Color.Red) },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                colors = textFieldColors,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = phone,
-                onValueChange = { phone = it },
+            // Campo teléfono
+            TextField(
+                value = telefono,
+                onValueChange = { if (it.all { c -> c.isDigit() } && it.length <= 10) telefono = it },
                 label = { Text("Teléfono") },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
+                isError = telefonoError,
+                supportingText = { if (telefonoError) Text("Solo 10 dígitos numéricos", color = Color.Red) },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                colors = textFieldColors,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+            // Campo contraseña
+            TextField(
+                value = pass,
+                onValueChange = { pass = it },
                 label = { Text("Contraseña") },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
+                isError = passError,
+                supportingText = { if (passError) Text("Mínimo 6 caracteres", color = Color.Red) },
                 visualTransformation = PasswordVisualTransformation(),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                colors = textFieldColors,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+            // Campo confirmar contraseña
+            TextField(
+                value = confirmPass,
+                onValueChange = { confirmPass = it },
                 label = { Text("Confirmar contraseña") },
-                singleLine = true,
-                shape = RoundedCornerShape(12.dp),
+                isError = confirmPassError,
+                supportingText = { if (confirmPassError) Text("Las contraseñas no coinciden", color = Color.Red) },
                 visualTransformation = PasswordVisualTransformation(),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                colors = textFieldColors,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-
+                // Cancelar → regresa a login
                 Button(
                     onClick = { navController.navigate("login") },
                     modifier = Modifier.weight(1f),
@@ -151,8 +185,10 @@ fun SignUpScreen(navController: NavController) {
                 ) {
                     Text(text = "Cancelar")
                 }
+
+                // Aceptar valida el formulario al presionar
                 Button(
-                    onClick = { },
+                    onClick = { validarFormulario() },
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
