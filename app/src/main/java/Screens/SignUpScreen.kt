@@ -28,18 +28,18 @@ import com.example.mainscreen.R
 fun SignUpScreen(navController: NavController) {
 
     // Estados de los campos
-    var nombre by remember { mutableStateOf("") }
-    var mail by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var pass by remember { mutableStateOf("") }
-    var confirmPass by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
     // Estados de error por campo
-    var nombreError by remember { mutableStateOf(false) }
-    var mailError by remember { mutableStateOf(false) }
-    var telefonoError by remember { mutableStateOf(false) }
-    var passError by remember { mutableStateOf(false) }
-    var confirmPassError by remember { mutableStateOf(false) }
+    var nameError by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
+    var phoneError by remember { mutableStateOf(false) }
+    var passwordError by remember { mutableStateOf(false) }
+    var confirmPasswordError by remember { mutableStateOf(false) }
 
     // Valida el formato del correo
     fun isValidEmail(email: String): Boolean {
@@ -47,12 +47,12 @@ fun SignUpScreen(navController: NavController) {
     }
 
     // Valida todos los campos y activa errores si algo falla
-    fun validarFormulario() {
-        nombreError = nombre.isBlank() || !nombre.all { it.isLetter() || it.isWhitespace() }
-        mailError = !isValidEmail(mail)
-        telefonoError = telefono.isBlank() || !telefono.all { it.isDigit() } || telefono.length != 10
-        passError = pass.length < 6
-        confirmPassError = confirmPass != pass
+    fun validateForm() {
+        nameError = name.isBlank() || !name.all { it.isLetter() || it.isWhitespace() }
+        emailError = !isValidEmail(email)
+        phoneError = phone.isBlank() || !phone.all { it.isDigit() } || phone.length != 10
+        passwordError = password.length < 6
+        confirmPasswordError = confirmPassword != password
     }
 
     Box(
@@ -87,11 +87,11 @@ fun SignUpScreen(navController: NavController) {
 
             // Campo nombre
             TextField(
-                value = nombre,
-                onValueChange = { nombre = it },
+                value = name,
+                onValueChange = { name = it },
                 label = { Text("Nombre") },
-                isError = nombreError,
-                supportingText = { if (nombreError) Text("Campo requerido", color = Color.Red) },
+                isError = nameError,
+                supportingText = { if (nameError) Text("Solo se permiten letras", color = Color.Red) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent
@@ -103,11 +103,11 @@ fun SignUpScreen(navController: NavController) {
 
             // Campo correo
             TextField(
-                value = mail,
-                onValueChange = { mail = it },
+                value = email,
+                onValueChange = { email = it },
                 label = { Text("Correo") },
-                isError = mailError,
-                supportingText = { if (mailError) Text("Correo no válido", color = Color.Red) },
+                isError = emailError,
+                supportingText = { if (emailError) Text("Correo no válido", color = Color.Red) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent
@@ -119,11 +119,11 @@ fun SignUpScreen(navController: NavController) {
 
             // Campo teléfono
             TextField(
-                value = telefono,
-                onValueChange = { if (it.all { c -> c.isDigit() } && it.length <= 10) telefono = it },
+                value = phone,
+                onValueChange = { if (it.all { c -> c.isDigit() } && it.length <= 10) phone = it },
                 label = { Text("Teléfono") },
-                isError = telefonoError,
-                supportingText = { if (telefonoError) Text("Solo 10 dígitos numéricos", color = Color.Red) },
+                isError = phoneError,
+                supportingText = { if (phoneError) Text("Solo 10 dígitos numéricos", color = Color.Red) },
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
                     unfocusedContainerColor = Color.Transparent
@@ -135,11 +135,11 @@ fun SignUpScreen(navController: NavController) {
 
             // Campo contraseña
             TextField(
-                value = pass,
-                onValueChange = { pass = it },
+                value = password,
+                onValueChange = { password = it },
                 label = { Text("Contraseña") },
-                isError = passError,
-                supportingText = { if (passError) Text("Mínimo 6 caracteres", color = Color.Red) },
+                isError = passwordError,
+                supportingText = { if (passwordError) Text("Mínimo 6 caracteres", color = Color.Red) },
                 visualTransformation = PasswordVisualTransformation(),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
@@ -152,11 +152,11 @@ fun SignUpScreen(navController: NavController) {
 
             // Campo confirmar contraseña
             TextField(
-                value = confirmPass,
-                onValueChange = { confirmPass = it },
+                value = confirmPassword,
+                onValueChange = { confirmPassword = it },
                 label = { Text("Confirmar contraseña") },
-                isError = confirmPassError,
-                supportingText = { if (confirmPassError) Text("Las contraseñas no coinciden", color = Color.Red) },
+                isError = confirmPasswordError,
+                supportingText = { if (confirmPasswordError) Text("Las contraseñas no coinciden", color = Color.Red) },
                 visualTransformation = PasswordVisualTransformation(),
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.Transparent,
@@ -188,7 +188,7 @@ fun SignUpScreen(navController: NavController) {
 
                 // Aceptar valida el formulario al presionar
                 Button(
-                    onClick = { validarFormulario() },
+                    onClick = { validateForm() },
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
