@@ -83,7 +83,7 @@ fun WelcomeScreen(navController: NavController) {
 
             // Botón Sign Up
             Button(
-                onClick = { },
+                onClick = { navController.navigate("signup") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color(0xFF5C54B4), shape = RoundedCornerShape(50)),
